@@ -242,8 +242,8 @@ fig_01 <- ggplot2::ggplot() +
   ggplot2::theme_classic() + 
   ggplot2::theme(
     legend.position = "inside",
-    legend.position.inside = c(0.95, 0.95), # x and y coordinates from 0 to 1
-    legend.justification = c("right", "top"), # Anchors the legend at those coordinates
+    legend.position.inside = c(0.95, 0.95),
+    legend.justification = c("right", "top"),
     legend.background = ggplot2::element_rect(fill = "white", color = "black")
     )
 
