@@ -2,6 +2,9 @@
 
 # togethr, both functions calculate three different interpolation techniques: k-order polynomial, linear, and spline interpolation
 
+# don't run
+# install.packages(c("knitr", "tidyverse", "magrittr", "ggplot2", "scales"))
+
 
 
 # load 5-year age group counts for the population
@@ -65,7 +68,11 @@ polynomial <- function(data, k = 1){ # note that a 1-order polynomial is equival
 
   # stop if the age column is not character
   if (!is.character(data$age)) {
-    stop(message("The age column must be of class character e.g., '0-4', '5-9', etc."))
+    stop(message("This column must be of class character e.g., '0-4', '5-9', etc."))
+  }
+  # stop if the column that lists the population is not numeric
+  if (!is.numeric(data$pop)) {
+    stop(message("This column must be of class numeric."))
   }
   
   # split the string
@@ -118,9 +125,13 @@ interpolationFun <- function(data, method = "spline"){
   # load pipe locally
   `%>%` <- magrittr::`%>%`
   
-  # stop if age column
+  # stop if age column is not character
   if (!is.character(data$age)) {
     stop(message("The age column must be of class character e.g., '0-4', '5-9', etc."))
+  }
+    # stop if the column that lists the population is not numeric
+  if (!is.numeric(data$pop)) {
+    stop(message("This column must be of class numeric."))
   }
   
   # split the string
@@ -192,7 +203,7 @@ census_linear <- interpolationFun(data = census, method = "linear")
 test <- function(data, test){
   x <- data[, 2]
   y <- test[, 2]
-  r <- cor( # correlation coefficient
+  r <- stats::cor( # correlation coefficient
     x = x,
     y = y
   )
