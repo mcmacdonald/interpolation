@@ -1,6 +1,6 @@
 # this .r script smooths population estimates reported for 5-year age groups into population estimates for 1-year age groups
 
-# togethr, both functions calculate three different interpolation techniques: k-order polynomial, linear, and spline interpolation
+# together, both functions calculate three different interpolation techniques: k-order polynomial, linear, and spline interpolation
 
 # don't run
 # install.packages(c("knitr", "tidyverse", "magrittr", "ggplot2", "scales"))
