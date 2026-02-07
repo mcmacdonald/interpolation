@@ -1,4 +1,6 @@
-# this .r script smooths 5-year population estimates from multiple interpolation techniques
+# this .r script smooths population estimates reported for 5-year age groups into population estimates for 1-year age groups
+
+# togethr, both functions calculate three different interpolation techniques: k-order polynomial, linear, and spline interpolation
 
 
 
@@ -56,12 +58,12 @@ census <- data.frame( # population totals, 2025
 
 
 # 1) function to compute polynomial interpolation ---------------------------------
-polynomial <- function(data, k){
+polynomial <- function(data, k = 1){ # note that a 1-order polynomial is equivalent to linear interpolation
   
   # load pipe locally
   `%>%` <- magrittr::`%>%`
-  
-  # first, recode string to numeric, if string
+
+  # stop if the age column is not character
   if (!is.character(data$age)) {
     stop(message("The age column must be of class character e.g., '0-4', '5-9', etc."))
   }
@@ -69,12 +71,14 @@ polynomial <- function(data, k){
   # split the string
   string <- stringr::str_split(data$age, pattern = "[-/_;, ]")
   
-  # columns
+  # into data frame
   string <- as.data.frame(do.call(rbind, string))
-  string <- string %>% dplyr::mutate(dplyr::across(dplyr::where(is.character), as.numeric)) # strings to numeric
-  colnames(string) <- c("lo", "hi")
+
+  # recode string to numeric, if string 
+  string <- string %>% dplyr::mutate(dplyr::across(dplyr::where(is.character), as.numeric))
+  colnames(string) <- c("lo", "hi") 
   
-  # join
+  # join split numeric columns to original data
   data <- cbind(string, data)
   
   # find the center points for the 5-year age brackets i.e., the middle age groups in the numeric coding
@@ -96,7 +100,7 @@ polynomial <- function(data, k){
   
   # estimate census counts by age
   newdata <- newdata %>% dplyr::mutate(pop = stats::predict(model, newdata = .)) %>% dplyr::rename(age = center)
-  # r <- dplyr::mutate(r, pop = round(x = pop, digits = 0)) # round to whole number
+  # newdata <- dplyr::mutate(newdata, pop = round(x = pop, digits = 0)) # round to whole number
   newdata <- dplyr::mutate(newdata, age = lo:hi) # re-scale age distribution
   
   # print age distribution
@@ -104,7 +108,7 @@ polynomial <- function(data, k){
   print(knitr::kable(newdata)) 
   return(newdata) # return
 }
-census_poly <- polynomial(data = census, k = 5)
+census_poly <- polynomial(data = census, k = 5) 
 
 
 
@@ -114,7 +118,7 @@ interpolationFun <- function(data, method = "spline"){
   # load pipe locally
   `%>%` <- magrittr::`%>%`
   
-  # first, recode string to numeric, if string
+  # stop if age column
   if (!is.character(data$age)) {
     stop(message("The age column must be of class character e.g., '0-4', '5-9', etc."))
   }
@@ -122,9 +126,13 @@ interpolationFun <- function(data, method = "spline"){
   # split the string
   string <- stringr::str_split(data$age, pattern = "[-/_;, ]")
   
-  # columns
+  # into data frame
   string <- as.data.frame(do.call(rbind, string))
-  string <- string %>% dplyr::mutate(dplyr::across(dplyr::where(is.character), as.numeric)) # strings to numeric
+
+  # recode string to numeric, if string
+  string <- string %>% dplyr::mutate(dplyr::across(dplyr::where(is.character), as.numeric))
+
+  # rename columns
   colnames(string) <- c("lo", "hi")
   
   # join
@@ -137,7 +145,7 @@ interpolationFun <- function(data, method = "spline"){
   lo <- min(data$lo); hi <- max(data$hi)
   
   # construct data frame
-  n <- seq( from = lo, to = hi, by = 1 )
+  n <- seq(from = lo, to = hi, by = 1)
   
   # the center points
   x <- data$center
@@ -168,7 +176,7 @@ interpolationFun <- function(data, method = "spline"){
   newdata <- as.data.frame(model) # coerce to data frame
   newdata <- dplyr::mutate(newdata, x = lo:hi) # rescale age distribution
   newdata <- dplyr::rename(newdata, age = x, pop = y) # rename columns
-  # r <- dplyr::mutate(r, pop = round(x = pop, digits = 0)) # round to whole number
+  # newdata <- dplyr::mutate(newdata, pop = round(x = pop, digits = 0)) # round to whole number
   
   # print age distribution
   print(paste0("age distribution:"))
