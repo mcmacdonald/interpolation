@@ -145,19 +145,30 @@ ax.set_xticks(range(0, 101, 10))
 ax.set_yticks(range(0, 1_000_001, 100_000))
 ax.yaxis.set_major_formatter(lambda val, pos: f"{int(val):,}")
 
-ax.set_title("Population estimates on July 1, 2025, Canada", fontsize=13, loc="left")
-ax.text(0, 1.02, "Triangulation of interpolation methods", transform=ax.transAxes, fontsize=10, color="gray")
-ax.set_xlabel("Age")
-ax.set_ylabel("Population")
+# title and subtitle, both placed in the same (axes) coordinate system so
+# spacing between them stays tight and consistent
+ax.text(0, 1.11, "Population estimates on July 1, 2025, Canada",
+        transform=ax.transAxes, ha="left", fontsize=16, color="black")
+ax.text(0, 1.045, "Triangulation of interpolation methods",
+        transform=ax.transAxes, ha="left", fontsize=12, color="black")
+
+ax.set_xlabel("Age", fontsize=12, color="black")
+ax.set_ylabel("Population", fontsize=12, color="black")
+ax.tick_params(labelsize=10, colors="black")
 
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
+ax.spines["left"].set_color("black")
+ax.spines["bottom"].set_color("black")
 
 legend = ax.legend(title="Method", loc="upper right", frameon=True)
 legend.get_frame().set_edgecolor("black")
 legend.get_frame().set_facecolor("white")
+plt.setp(legend.get_texts(), color="black")
+plt.setp(legend.get_title(), color="black")
 
-plt.tight_layout()
+# extra top margin reserved via rect so the title/subtitle aren't clipped
+plt.tight_layout(rect=[0, 0, 1, 0.90])
 
 # output high resolution figure
 plt.savefig("~/Desktop/fig_01.png", dpi=250)
