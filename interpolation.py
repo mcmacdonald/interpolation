@@ -60,7 +60,7 @@ census = pd.DataFrame({  # population totals, 2025
     ],
 })
 
-# parese and split the strings for the age brackets to identify midpoints in age ranges
+# parse and split the strings for the age brackets to identify midpoints in age ranges
 def _split_age_brackets(data):s
     """parse age strings and derive age bracket midpoint (center) and width to impute populations for 5-year age brackets."""
 
@@ -82,6 +82,7 @@ def _split_age_brackets(data):s
     out["center"] = (out["hi"] + out["lo"]) / 2
     out["width"] = (out["hi"] - out["lo"]).abs() + 1
     return out
+
 
 
 # 1) function to compute polynomial interpolation ---------------------------------
@@ -118,6 +119,7 @@ def polynomial(data, k=1):
 
 
 census_poly = polynomial(data=census, k=5)
+
 
 
 # 2) function for linear/spline interpolation ----------------------------------------------------------
