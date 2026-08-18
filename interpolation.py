@@ -15,19 +15,53 @@ import matplotlib.pyplot as plt
 # https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000501
 census = pd.DataFrame({  # population totals, 2025
     "age": [
-        "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
-        "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74",
-        "75-79", "80-84", "85-89", "90-94", "95-99",
+        "0-4", 
+        "5-9", 
+        "10-14", 
+        "15-19", 
+        "20-24", 
+        "25-29", 
+        "30-34", 
+        "35-39",
+        "40-44", 
+        "45-49", 
+        "50-54", 
+        "55-59", 
+        "60-64", 
+        "65-69", 
+        "70-74",
+        "75-79", 
+        "80-84", 
+        "85-89", 
+        "90-94", 
+        "95-99",
     ],
     "pop": [
-        1871184, 2138350, 2251628, 2319393, 2703780, 2995647, 3175724,
-        3032523, 2859631, 2593361, 2447311, 2446446, 2708208, 2494286,
-        2044533, 1609542, 1008273, 579797, 275677, 84078,
+        1871184, 
+        2138350, 
+        2251628, 
+        2319393, 
+        2703780, 
+        2995647,
+        3175724,
+        3032523, 
+        2859631, 
+        2593361,
+        2447311, 
+        2446446,
+        2708208,
+        2494286,
+        2044533, 
+        1609542,
+        1008273,
+        579797, 
+        275677, 
+        84078,
     ],
 })
 
-# 
-def _split_age_brackets(data):
+# parese and split the strings for the age brackets to identify midpoints in age ranges
+def _split_age_brackets(data):s
     """parse age strings and derive age bracket midpoint (center) and width to impute populations for 5-year age brackets."""
 
     # stop if the age column is not string/object
